@@ -1,10 +1,10 @@
 const fs = require('fs');
 const {stdout, stdin} = process;
-fs.createWriteStream('./text.txt');
+fs.createWriteStream('./02-write-file/text.txt');
 
 stdout.write('Hello, please write some text.\n');
 stdin.on('data', input => {
-  fs.readFile('./text.txt', 'utf8', (error, data) => {
+  fs.readFile('./02-write-file/text.txt', 'utf8', (error, data) => {
     error ? console.log(error) : null;
     input = input.toString();
     if(input.includes('\r' )) {
@@ -16,7 +16,7 @@ stdin.on('data', input => {
       process.exit();
     }
 
-    fs.writeFile('./text.txt',   `${data}${input}`, (error => {
+    fs.writeFile('./02-write-file/text.txt',   `${data}${input}`, (error => {
       error ? console.log(error) : null;}));
   });
 });
