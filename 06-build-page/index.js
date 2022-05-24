@@ -69,7 +69,7 @@ async function createHTML() {
           await fs.readFile(components + '//' + file, 'utf8', async (err, data) => {
             arrHTML = arrHTML.join('');
             arrHTML = arrHTML.replace(`{{${componentName}}}`, data);
-            console.log(arrHTML);
+            // console.log(arrHTML);
             await fs.writeFile(html, arrHTML, async () => {});
             // console.log(arrHTML);
             arrHTML = arrHTML.split('');
