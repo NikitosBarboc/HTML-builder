@@ -3,10 +3,10 @@ const path = require('path');
 const distPath = path.join(__dirname, 'project-dist');
 const components = path.join(__dirname, 'components');
 const assetsPath =  path.join(__dirname, 'assets');
-const newAssets =  path.join(distPath, '\\assets');
-const html = path.join(distPath, '\\index.html');
+const newAssets =  path.join(distPath, 'assets');
+const html = path.join(distPath, 'index.html');
 const template = path.join(__dirname, 'template.html');
-const bunbel = path.join(__dirname, '/project-dist/style.css');
+const bunbel = path.join(__dirname, 'project-dist', 'style.css');
 const styles = path.join(__dirname, 'styles');
 const { promisify } = require('util');
 const readdir = promisify(fs.readdir);
@@ -25,7 +25,7 @@ async function getInfo(stylesFolder) {
   let stylesFile;
   for (const file of stylesFolder) {
     if(file.slice(file.length - 4, file.length) !== '.css') continue;
-    stylesFile = await fs.promises.readFile(`${styles}/${file}`, 'utf8');
+    stylesFile = await fs.promises.readFile(path.join(styles, file), 'utf8');
     arrResult.push(stylesFile);
   }
 }
@@ -38,16 +38,16 @@ async function createCSS() {
 async function createAssetsFolder() {await fs.promises.mkdir(newAssets);}
 
 async function copyFile(folder) {
-  let fullPath = assetsPath + '\\' + folder;
+  let fullPath = path.join(assetsPath, folder);
   fs.readdir(fullPath, async (error, fullPath) => {
 
     for(let file of fullPath) {
 
-      let fileInfo = await fs.promises.lstat(`${assetsPath}\\${folder}\\${file}`);
+      let fileInfo = await fs.promises.lstat(path.join(assetsPath, folder, file));
       let isDirectory = await fileInfo.isDirectory();
 
       if(isDirectory !== true) {
-        fs.copyFile(`${assetsPath}\\${folder}\\${file}`, newAssets + '\\' +  folder + '\\' + file, (err) => {});
+        fs.copyFile(path.join(assetsPath, folder, file), path.join(newAssets, folder, file), (err) => {});
       } else {
         await copyFolder(fullPath);
       }
@@ -66,7 +66,7 @@ async function createHTML() {
       for(let file of fullPath) {
         let componentName = file.slice(0, file.length -5);
         if(arrHTML.join('').includes(`{{${componentName}}}`)) {
-          await fs.readFile(components + '//' + file, 'utf8', async (err, data) => {
+          await fs.readFile(path.join(components, file), 'utf8', async (err, data) => {
             arrHTML = arrHTML.join('');
             arrHTML = arrHTML.replace(`{{${componentName}}}`, data);
             // console.log(arrHTML);
@@ -83,13 +83,13 @@ async function copyFolder(assetsPath) {
   fs.readdir(assetsPath, async (error, folder) => {
     console.log(folder);
     for(let file of folder) {
-      let fileInfo = await fs.promises.lstat(assetsPath + '\\' + file);
+      let fileInfo = await fs.promises.lstat(path.join(assetsPath, file));
       let isDirectory = await fileInfo.isDirectory();
       if(isDirectory === true) {
-        await fs.promises.mkdir(newAssets + '\\' + file);
+        await fs.promises.mkdir(path.join(newAssets, file));
         await copyFile(file);
       } else {
-        fs.copyFile(assetsPath + '\\' + file, newAssets + '\\'  + file, (err) => {});
+        fs.copyFile(path.join(assetsPath, file), path.join(newAssets, file), (err) => {});
       }
     }
     

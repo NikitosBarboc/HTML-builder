@@ -21,7 +21,7 @@ new Promise((resolve) =>
 
   .then((newFolder) => {
     for(const file of newFolder) {
-      fs.unlink(`${newFolderPath }\\${file}`,  (error) => {
+      fs.unlink(path.join(newFolderPath, file),  (error) => {
         error ? console.log(error): null;
       });
     }
@@ -38,9 +38,9 @@ new Promise((resolve) => {
   });})
   .then((folder) => {
     for(const file of folder) {
-      fs.readFile(`${pathFolder}\\${file}` ,'utf8', (error, data) => {
+      fs.readFile(path.join(pathFolder, file) ,'utf8', (error, data) => {
         error ? console.log(error) : null;
-        fs.writeFile(`${newFolderPath }\\${file}`, data, (error) => {
+        fs.writeFile(path.join(newFolderPath,file), data, (error) => {
           error ? console.log(error): null;
         });
       });
