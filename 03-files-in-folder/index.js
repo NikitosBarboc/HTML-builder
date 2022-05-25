@@ -15,7 +15,7 @@ async function getInfoFromFolder() {
       res +=  ` - ${stats.size}b`;
       // console.log(stats.size)
       if(file.isFile() ) {
-        res.length > 7 ? console.log(res) : null;
+        res.length > 6 ? console.log(res) : null;
       }
     });
   }
