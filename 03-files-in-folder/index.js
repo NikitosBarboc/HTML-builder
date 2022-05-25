@@ -10,9 +10,13 @@ async function getInfoFromFolder() {
     file.isFile() ?  res += path.parse(file.name).name + ' - ' + path.parse(file.name).ext.slice(1) : null;
     let pathStat = path.join(__dirname, 'secret-folder' , file.name);
     fs.stat(pathStat, (err, stats) => {
-      err ? console.log(err) : null;
+      // err ? console.log(err) : null;
+
       res +=  ` - ${stats.size}b`;
-      res !== ' - 0b' ? console.log(res) : null;
+      // console.log(stats.size)
+      if(file.isFile() ) {
+        res.length > 7 ? console.log(res) : null;
+      }
     });
   }
 
